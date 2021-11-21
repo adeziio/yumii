@@ -29,7 +29,6 @@ class music(commands.Cog):
       m_url = self.music_queue[0][0]['source']
 
       self.music_queue.pop(0)
-
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
     else:
       self.is_playing = False
@@ -41,21 +40,28 @@ class music(commands.Cog):
       m_url = self.music_queue[0][0]['source']
 
       if self.vc == "" or not not self.vc.is_connected():
-        self.vc = await self.music_queue[0][1].connect()
+        try:
+          self.vc = await self.music_queue[0][1].connect()
+        except Exception:
+          print(Exception)
       else:
-        self.vc = await self.bot.move_to(self.music_queue[0][1])
+        try:
+          self.vc = await self.bot.move_to(self.music_queue[0][1])
+        except Exception:
+          print(Exception)
 
+        
       self.music_queue.pop(0)
-
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
     else:
       self.is_playing = False
 
   @commands.command()
-  async def play(self, ctx, *args):
+  async def p(self, ctx, *args):
     query = " ".join(args)
 
     voice_channel = ctx.author.voice.channel
+
     if voice_channel is None:
       await ctx.send("Connect to a voice channel!")
     else:
@@ -63,14 +69,15 @@ class music(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await ctx.send(query + " added to queue")
+        await ctx.send("*" + query + " added to queue*")
         self.music_queue.append([song, voice_channel])
 
         if self.is_playing == False:
+          await ctx.send("*Now playing: " + str(song['title']) + "*")
           await self.play_music()
 
   @commands.command()
-  async def queue(self, ctx):
+  async def q(self, ctx):
     retval = ""
     for i in range(0, len(self.music_queue)):
       retval += self.music_queue[i][0]['title'] + "\n"
@@ -81,16 +88,11 @@ class music(commands.Cog):
       await ctx.send("Music queue is empty.")
 
   @commands.command()
-  async def skip(self, ctx):
+  async def s(self, ctx):
     if self.vc != "":
       self.vc.stop()
-      await self.play_music
-  
-  @commands.command()
-  async def stop(self, ctx):
-    if self.vc != "":
-      self.vc.stop()
+      await self.play_music()
 
   @commands.command()
-  async def menu(self, ctx):
-    await ctx.send("$play *song name*\n$stop\n$skip\n$queue")
+  async def m(self, ctx):
+    await ctx.send("-p *song name* (play)\n-s (skip)\n-q (queue list)\n-m (menu)")
