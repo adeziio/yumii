@@ -90,3 +90,7 @@ class music(commands.Cog):
   async def stop(self, ctx):
     if self.vc != "":
       self.vc.stop()
+
+  @commands.command()
+  async def menu(self, ctx):
+    await ctx.send("$play *song name*\n$stop\n$skip\n$queue")
