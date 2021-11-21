@@ -1,4 +1,4 @@
-import discord
+import os
 from discord.ext import commands
 from music import music
 # import music
@@ -14,4 +14,4 @@ Bot = commands.Bot(command_prefix='/')
 Bot.add_cog(music(Bot))
 
 
-Bot.run('OTExNzUxOTk3MTUyMTk0NTcx.YZl9Nw.ElMqo2YjfUxHN0X_8XnzOZkS-d4')
+Bot.run(os.getenv('BOT_TOKEN'))
