@@ -63,7 +63,7 @@ class music(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await ctx.send("Song added to the queue")
+        await ctx.send(query + " added to queue")
         self.music_queue.append([song, voice_channel])
 
         if self.is_playing == False:
@@ -78,7 +78,7 @@ class music(commands.Cog):
     if retval != "":
       await ctx.send(retval)
     else:
-      await ctx.send("No music in queue.")
+      await ctx.send("Music queue is empty.")
 
   @commands.command()
   async def skip(self, ctx):
