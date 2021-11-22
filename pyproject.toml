@@ -10,6 +10,7 @@ discord = "^1.7.3"
 youtube_dl = "^2021.6.6"
 PyNaCl = "^1.4.0"
 Flask = "^2.0.2"
+tasks = "^2.8.0"
 
 [tool.poetry.dev-dependencies]
 

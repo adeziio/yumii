@@ -10,6 +10,14 @@ class music(commands.Cog):
     self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
     self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
     self.vc = ""
+    self.status = discord.Status.online
+    self.activity = discord.Activity(type=discord.ActivityType.listening, name="Spotify")
+  
+  def getStatus(self):
+    return self.status
+  
+  def getActivity(self):
+    return self.activity
 
   def search_yt(self, item):
     with YoutubeDL(self.YDL_OPTIONS) as ydl:
@@ -25,20 +33,22 @@ class music(commands.Cog):
 
       m_url = self.music_queue[0][0]['source']
       m_title = self.music_queue[0][0]['title']
-      # self.set_status(discord.ActivityType.listening, m_title)
+      self.status = discord.Status.online
+      self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
 
-      print("play_next", len(self.music_queue))
       self.music_queue.pop(0)
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=self.play_next())
     
-
   async def play_music(self):
+    global status_type
+    global status_name
     if len(self.music_queue) > 0:
       self.is_playing = True
 
       m_url = self.music_queue[0][0]['source']
       m_title = self.music_queue[0][0]['title']
-      # await self.set_status(discord.ActivityType.listening, m_title)
+      self.status = discord.Status.online
+      self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
 
       if self.vc == "":
         try:
@@ -49,10 +59,6 @@ class music(commands.Cog):
       print("play_music", len(self.music_queue))
       self.music_queue.pop(0)
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=self.play_next())
-
-
-  async def set_status(self, type, name):
-    await self.bot.change_presence(activity=discord.Activity(type=type, name=name))
 
   @commands.command()
   async def p(self, ctx, *args):
