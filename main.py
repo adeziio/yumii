@@ -1,13 +1,7 @@
 import os
-import discord
-
-
 from discord.ext import commands, tasks
 from music import music
 from keep_alive import keep_alive
-
-from discord.ext.tasks import loop
-import asyncio
 
 Bot = commands.Bot(command_prefix='-')
 
