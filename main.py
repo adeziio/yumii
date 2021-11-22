@@ -31,5 +31,5 @@ async def change_status():
     musicObjActivity = musicObj.getActivity()
     await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
  
-# keep_alive()
+keep_alive()
 Bot.run(os.getenv('BOT_TOKEN'))
