@@ -56,7 +56,6 @@ class music(commands.Cog):
         except Exception as e:
           print(e)
       
-      print("play_music", len(self.music_queue))
       self.music_queue.pop(0)
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=self.play_next())
 
