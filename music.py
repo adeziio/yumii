@@ -37,7 +37,7 @@ class music(commands.Cog):
       self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
 
       self.music_queue.pop(0)
-      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=self.play_next())
+      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
     
   async def play_music(self):
     global status_type
@@ -57,7 +57,12 @@ class music(commands.Cog):
           print(e)
       
       self.music_queue.pop(0)
-      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=self.play_next())
+      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+
+  async def x(self):
+    if self.vc != "":
+      self.vc.stop()
+      await self.vc.disconnect()
 
   @commands.command()
   async def p(self, ctx, *args):
