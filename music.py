@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
+from func import menu
 
 class music(commands.Cog):
   def __init__(self, bot):
@@ -59,10 +60,14 @@ class music(commands.Cog):
       self.music_queue.pop(0)
       self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
 
-  async def x(self):
+  async def vc_disconnect(self):
     if self.vc != "":
       self.vc.stop()
       await self.vc.disconnect()
+    
+  @commands.command()
+  async def yumii(self, ctx):
+    await ctx.send(embed=menu())
 
   @commands.command()
   async def p(self, ctx, *args):
@@ -84,11 +89,11 @@ class music(commands.Cog):
         if self.is_playing == False:
           # await self.set_status(discord.ActivityType.listening, str(song['title']))
           await self.play_music()
-
+  
   @commands.command()
   async def q(self, ctx):
     if len(self.music_queue) > 0:
-      retval = "Up next ⏯:\n"
+      retval = "Up next ⌛:"
       for i in range(0, len(self.music_queue)):
         retval += "*" + self.music_queue[i][0]['title'] + "*\n"
       if retval != "":
@@ -103,7 +108,5 @@ class music(commands.Cog):
         self.is_playing = False
       self.vc.stop()
       self.play_next()
+  
 
-  @commands.command()
-  async def m(self, ctx):
-    await ctx.send("-p *song name* (play)\n-s (skip)\n-q (queue list)\n-m (menu)")

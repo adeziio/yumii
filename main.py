@@ -17,6 +17,7 @@ Bot.add_cog(musicObj)
 async def on_ready():
   print("yumii is ready!")
   change_status.start()
+    
 
 @tasks.loop(seconds=5)
 async def change_status():
@@ -33,7 +34,7 @@ async def change_status():
   if counter == 60:
     if musicObjstatus == musicObj.getStatus() and musicObjActivity == musicObj.getActivity():
       await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="Spotify"))
-      await musicObj.x()
+      await musicObj.vc_disconnect()
     counter = 0
   
   counter += 1
