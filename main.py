@@ -31,8 +31,10 @@ async def change_status():
     await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
     counter = 0
 
-  if counter == 60:
+  if counter == 100:
     if musicObjstatus == musicObj.getStatus() and musicObjActivity == musicObj.getActivity():
+      musicObj.setIsPlaying(False)
+      musicObj.setVC("")
       await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="Spotify"))
       await musicObj.vc_disconnect()
     counter = 0

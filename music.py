@@ -20,6 +20,12 @@ class music(commands.Cog):
   def getActivity(self):
     return self.activity
 
+  def setIsPlaying(self, status):
+    self.is_playing = status
+
+  def setVC(self, vc):
+    self.vc = vc
+
   def search_yt(self, item):
     with YoutubeDL(self.YDL_OPTIONS) as ydl:
       try:
