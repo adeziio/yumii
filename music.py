@@ -122,5 +122,17 @@ class music(commands.Cog):
         await ctx.send("Music queue is empty.")
       self.vc.stop()
       self.play_next()
+
+  @commands.command()
+  async def P(self, ctx, *args):
+    await self.p(ctx, *args)
+
+  @commands.command()
+  async def Q(self, ctx, *args):
+    await self.q(ctx, *args)
+
+  @commands.command()
+  async def S(self, ctx, *args):
+    await self.s(ctx, *args)
   
 
