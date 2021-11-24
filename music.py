@@ -1,11 +1,13 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
-from func import menu
+from func import displayMenu, displaySongInfo, displayQueueList
+from datetime import datetime
 
 class music(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
+    self.ctx = ""
     self.is_playing = False
     self.music_queue = []
     self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
@@ -13,6 +15,10 @@ class music(commands.Cog):
     self.vc = ""
     self.status = discord.Status.online
     self.activity = discord.Activity(type=discord.ActivityType.listening, name="Spotify")
+    self.songInfo = {}
+  
+  def getSongInfo(self):
+    return self.songInfo
   
   def getStatus(self):
     return self.status
@@ -35,7 +41,31 @@ class music(commands.Cog):
         info = ydl.extract_info("ytsearch:%s" % item, download=False)['entries'][0]
       except Exception:
         return False
-    return {'source': info['formats'][0]['url'], 'title': info['title']}
+
+    try:
+      artist = info['artist']
+    except Exception:
+      artist = ""
+    
+    try:
+      album = info['album']
+    except Exception:
+      album = ""
+
+    infoJson = {
+      'source': info['formats'][0]['url'], 
+      'title': info['title'],
+      'artist': artist,
+      'album': album,
+      'thumbnail': info['thumbnail'],
+      'webpage_url': info['webpage_url'],
+      'channel_url': info['channel_url'],
+      'description': info['description'],
+      'view_count': "{:,}".format(info['view_count']),
+      'upload_date': str(datetime.strptime(info['upload_date'],'%Y%m%d').strftime('%b %d, %Y')),
+    }
+
+    return infoJson
 
   def play_next(self):
     if len(self.music_queue) > 0:
@@ -43,6 +73,7 @@ class music(commands.Cog):
         self.is_playing = True
         m_url = self.music_queue[0][0]['source']
         m_title = self.music_queue[0][0]['title']
+        self.songInfo = self.music_queue[0][0]
         self.status = discord.Status.online
         self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
@@ -65,6 +96,7 @@ class music(commands.Cog):
         self.is_playing = True
         m_url = self.music_queue[0][0]['source']
         m_title = self.music_queue[0][0]['title']
+        self.songInfo = self.music_queue[0][0]
         self.status = discord.Status.online
         self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
@@ -72,20 +104,27 @@ class music(commands.Cog):
       except Exception as e:
         print(e)
         self.is_playing = True
-    else:
-      self.is_playing = False
+    # else:
+    #   self.is_playing = False
 
   async def vc_disconnect(self):
     if self.vc != "":
       self.vc.stop()
       await self.vc.disconnect()
     
+  async def displaySongInfo(self, status, song, color):
+    await self.ctx.send(embed=displaySongInfo(status, song, color))
+  
+  async def displayQueueList(self, queueList):
+    await self.ctx.send(embed=displayQueueList(queueList))
+    
   @commands.command()
   async def yumii(self, ctx):
-    await ctx.send(embed=menu())
+    await ctx.send(embed=displayMenu())
 
   @commands.command()
   async def p(self, ctx, *args):
+    self.ctx = ctx
     query = " ".join(args)
     voice_channel = ""
     try:
@@ -97,25 +136,28 @@ class music(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await ctx.send("Added to queue ▶️:\n" + "*" + str(song['title']) + "*")
+        await self.displaySongInfo("Added to queue ⌛:", song, "light_gray")
         self.music_queue.append([song, voice_channel])
-
+        
         if self.is_playing == False:
           await self.play_music()
   
   @commands.command()
   async def q(self, ctx):
-    if len(self.music_queue) > 0:
-      retval = "Up next ⌛:\n"
-      for i in range(0, len(self.music_queue)):
-        retval += "*" + self.music_queue[i][0]['title'] + "*\n"
-      if retval != "":
-        await ctx.send(retval)
-    else:
-      await ctx.send("Music queue is empty.")
+    self.ctx = ctx
+    # if len(self.music_queue) > 0:
+    await self.displayQueueList(self.music_queue)
+      # retval = "Up next ⌛:\n"
+      # for i in range(0, len(self.music_queue)):
+      #   retval += "*" + self.music_queue[i][0]['title'] + "*\n"
+      # if retval != "":
+      #   await ctx.send(retval)
+    # else:
+    #   await ctx.send("Music queue is empty.")
 
   @commands.command()
   async def s(self, ctx):
+    self.ctx = ctx
     if self.vc != "":
       if len(self.music_queue) == 0:
         self.is_playing = False
