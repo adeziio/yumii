@@ -77,7 +77,6 @@ class music(commands.Cog):
       voice_channel = ctx.author.voice.channel
     except Exception:
       await ctx.send("Connect to a voice channel!")
-
     if voice_channel != "":
       song = self.search_yt(query)
       if type(song) == type(True):
@@ -87,7 +86,6 @@ class music(commands.Cog):
         self.music_queue.append([song, voice_channel])
 
         if self.is_playing == False:
-          # await self.set_status(discord.ActivityType.listening, str(song['title']))
           await self.play_music()
   
   @commands.command()
