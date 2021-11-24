@@ -39,14 +39,12 @@ class music(commands.Cog):
 
   def play_next(self):
     if len(self.music_queue) > 0:
-      self.is_playing = True
-
-      m_url = self.music_queue[0][0]['source']
-      m_title = self.music_queue[0][0]['title']
-      self.status = discord.Status.online
-      self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
-
       try:
+        self.is_playing = True
+        m_url = self.music_queue[0][0]['source']
+        m_title = self.music_queue[0][0]['title']
+        self.status = discord.Status.online
+        self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         self.music_queue.pop(0)
         self.is_playing = False
@@ -59,19 +57,17 @@ class music(commands.Cog):
     global status_type
     global status_name
     if len(self.music_queue) > 0:
-      self.is_playing = True
-
-      m_url = self.music_queue[0][0]['source']
-      m_title = self.music_queue[0][0]['title']
-      self.status = discord.Status.online
-      self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
-
       try:
         self.vc = await self.music_queue[0][1].connect()
       except Exception as e:
         print(e)
       
       try:
+        self.is_playing = True
+        m_url = self.music_queue[0][0]['source']
+        m_title = self.music_queue[0][0]['title']
+        self.status = discord.Status.online
+        self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         self.music_queue.pop(0)
         self.is_playing = False
