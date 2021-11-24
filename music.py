@@ -83,7 +83,7 @@ class music(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await ctx.send("Added to queue ▶️: " + "*" + str(song['title']) + "*")
+        await ctx.send("Added to queue ▶️:\n" + "*" + str(song['title']) + "*")
         self.music_queue.append([song, voice_channel])
 
         if self.is_playing == False:
@@ -93,7 +93,7 @@ class music(commands.Cog):
   @commands.command()
   async def q(self, ctx):
     if len(self.music_queue) > 0:
-      retval = "Up next ⌛:"
+      retval = "Up next ⌛:\n"
       for i in range(0, len(self.music_queue)):
         retval += "*" + self.music_queue[i][0]['title'] + "*\n"
       if retval != "":
@@ -106,6 +106,7 @@ class music(commands.Cog):
     if self.vc != "":
       if len(self.music_queue) == 0:
         self.is_playing = False
+        await ctx.send("Music queue is empty.")
       self.vc.stop()
       self.play_next()
   
