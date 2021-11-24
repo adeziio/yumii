@@ -35,8 +35,8 @@ def displaySongInfo(status, songInfo, color):
   return embed
 
 def displayQueueList(queueList):
-  title = "Queue List"
-  description = "Up next ⌛:\n\n"
+  title = "Up next ⌛:\n\n"
+  description = ""
   if len(queueList) > 0:
     for i in range(0, len(queueList)):
       description += str(i+1) + ". *" + queueList[i][0]['title'] + "*\n"
