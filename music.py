@@ -46,10 +46,14 @@ class music(commands.Cog):
       self.status = discord.Status.online
       self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
 
-      self.music_queue.pop(0)
-      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-    if len(self.music_queue) == 0:
-      self.is_playing = False
+      try:
+        self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+        self.music_queue.pop(0)
+        self.is_playing = False
+      except Exception as e:
+        print(e)
+        self.is_playing = True
+      
     
   async def play_music(self):
     global status_type
@@ -67,10 +71,13 @@ class music(commands.Cog):
       except Exception as e:
         print(e)
       
-      self.music_queue.pop(0)
-      self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-    if len(self.music_queue) == 0:
-      self.is_playing = False
+      try:
+        self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+        self.music_queue.pop(0)
+        self.is_playing = False
+      except Exception as e:
+        print(e)
+        self.is_playing = True
 
   async def vc_disconnect(self):
     if self.vc != "":
