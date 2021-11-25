@@ -142,7 +142,7 @@ class music(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await self.displaySongInfo("Added to queue ⌛:", song, "light_gray")
+        await self.displaySongInfo("Added to queue ⌛", song, "light_gray")
         self.music_queue.append([song, voice_channel])
         
         if self.is_playing == False:

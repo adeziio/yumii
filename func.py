@@ -20,10 +20,9 @@ def displaySongInfo(status, songInfo, color):
   if color == "green":
     colour = discord.Colour.green()
   
-  title = status + "\n\n" + songInfo['title']
+  title = status + " " + songInfo['duration'] + "\n\n" + songInfo['title']
   description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n"
   description += songInfo['view_count'] + " views * " + songInfo['upload_date']
-  description += songInfo['duration']
   embed = discord.Embed(
           title = title,
           description = description,
