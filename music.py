@@ -92,26 +92,11 @@ class music(commands.Cog):
       self.checkIsPlaying()
     
   async def play_music(self):
-    global status_type
-    global status_name
-    if len(self.music_queue) > 0:
-      try:
-        self.vc = await self.music_queue[0][1].connect()
-      except Exception as e:
-        print(e)
-      try:
-        self.is_playing = True
-        m_url = self.music_queue[0][0]['source']
-        m_title = self.music_queue[0][0]['title']
-        self.songInfo = self.music_queue[0][0]
-        self.status = discord.Status.online
-        self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
-        self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-        self.music_queue.pop(0)
-      except Exception:
-        self.is_playing = True
-    else:
-      self.checkIsPlaying()
+    try:
+      self.vc = await self.music_queue[0][1].connect()
+      self.play_next()
+    except Exception as e:
+      print(e)
 
   async def vc_disconnect(self):
     if self.vc != "":
@@ -158,10 +143,12 @@ class music(commands.Cog):
     self.ctx = ctx
     if self.vc != "":
       if len(self.music_queue) == 0:
-        self.is_playing = False
-        await self.displayQueueList(self.music_queue)
-      self.vc.stop()
-      self.play_next()
+        await self.displayQueueList(self.music_queue) # TODO: replace this with displayWarning
+      elif len(self.music_queue) == 1:
+        await ctx.send("Add more songs to earn a skip!") # TODO: replace this with displayWarning
+      else:
+        self.vc.stop()
+        self.play_next()
 
   @commands.command()
   async def P(self, ctx, *args):

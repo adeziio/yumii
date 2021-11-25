@@ -49,3 +49,6 @@ def displayQueueList(queueList):
           )
   embed.set_footer(text="")
   return embed
+
+# def displayWarning(status, songInfo, color):
+#   return embed
