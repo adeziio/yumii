@@ -174,5 +174,3 @@ class music(commands.Cog):
   @commands.command()
   async def S(self, ctx, *args):
     await self.s(ctx, *args)
-  
-
