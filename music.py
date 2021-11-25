@@ -159,7 +159,7 @@ class music(commands.Cog):
     if self.vc != "":
       if len(self.music_queue) == 0:
         self.is_playing = False
-        await ctx.send("Music queue is empty.")
+        await self.displayQueueList(self.music_queue)
       self.vc.stop()
       self.play_next()
 
