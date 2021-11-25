@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
 from func import displayMenu, displaySongInfo, displayQueueList
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class music(commands.Cog):
   def __init__(self, bot):
@@ -61,11 +61,19 @@ class music(commands.Cog):
       'webpage_url': info['webpage_url'],
       'channel_url': info['channel_url'],
       'description': info['description'],
+      'duration': str(timedelta(seconds=info['duration'])),
       'view_count': "{:,}".format(info['view_count']),
       'upload_date': str(datetime.strptime(info['upload_date'],'%Y%m%d').strftime('%b %d, %Y')),
     }
-
     return infoJson
+  
+  def checkIsPlaying(self):
+    if self.is_playing:
+      if len(self.music_queue) == 0:
+        self.is_playing = False
+    else:
+      if len(self.music_queue) > 0:
+        self.is_playing = True
 
   def play_next(self):
     if len(self.music_queue) > 0:
@@ -78,11 +86,10 @@ class music(commands.Cog):
         self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         self.music_queue.pop(0)
-      except Exception as e:
-        print(e)
+      except Exception:
         self.is_playing = True
     else:
-      self.is_playing = False  
+      self.checkIsPlaying()
     
   async def play_music(self):
     global status_type
@@ -101,11 +108,10 @@ class music(commands.Cog):
         self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
         self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         self.music_queue.pop(0)
-      except Exception as e:
-        print(e)
+      except Exception:
         self.is_playing = True
-    # else:
-    #   self.is_playing = False
+    else:
+      self.checkIsPlaying()
 
   async def vc_disconnect(self):
     if self.vc != "":
@@ -145,15 +151,7 @@ class music(commands.Cog):
   @commands.command()
   async def q(self, ctx):
     self.ctx = ctx
-    # if len(self.music_queue) > 0:
     await self.displayQueueList(self.music_queue)
-      # retval = "Up next ⌛:\n"
-      # for i in range(0, len(self.music_queue)):
-      #   retval += "*" + self.music_queue[i][0]['title'] + "*\n"
-      # if retval != "":
-      #   await ctx.send(retval)
-    # else:
-    #   await ctx.send("Music queue is empty.")
 
   @commands.command()
   async def s(self, ctx):

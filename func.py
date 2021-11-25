@@ -23,6 +23,7 @@ def displaySongInfo(status, songInfo, color):
   title = status + "\n\n" + songInfo['title']
   description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n"
   description += songInfo['view_count'] + " views * " + songInfo['upload_date']
+  description += songInfo['duration']
   embed = discord.Embed(
           title = title,
           description = description,
@@ -35,7 +36,7 @@ def displaySongInfo(status, songInfo, color):
   return embed
 
 def displayQueueList(queueList):
-  title = "Up next ⌛:\n\n"
+  title = "Up next ⌛\n\n"
   description = ""
   if len(queueList) > 0:
     for i in range(0, len(queueList)):
