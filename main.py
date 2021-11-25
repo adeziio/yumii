@@ -29,7 +29,6 @@ async def change_status():
     musicObjActivity = musicObj.getActivity()
     await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
     await musicObj.displaySongInfo("Now Playing ▶️", musicObj.getSongInfo(), "green")
-    
 
   if musicObj.getIsPlaying() == False:
     await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="Spotify"))
