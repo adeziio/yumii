@@ -99,7 +99,9 @@ class music(commands.Cog):
   async def vc_disconnect(self):
     if self.vc != "":
       self.vc.stop()
+      await self.displayMessage("", "Music queue is empty, good bye...", "red")
       await self.vc.disconnect()
+      self.vc = ""
     
   async def displaySongInfo(self, status, song, color):
     await self.ctx.send(embed=displaySongInfo(status, song, color))
