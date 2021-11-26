@@ -50,5 +50,16 @@ def displayQueueList(queueList):
   embed.set_footer(text="")
   return embed
 
-# def displayWarning(status, songInfo, color):
-#   return embed
+def displayMessage(title, message, color):
+  colour = discord.Colour.red()
+  if color == "red":
+    colour = discord.Colour.red()
+  title = title
+  description = message
+  embed = discord.Embed(
+          title = title,
+          description = description,
+          colour = colour,
+          )
+  embed.set_footer(text="")
+  return embed

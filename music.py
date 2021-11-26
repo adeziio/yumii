@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
-from func import displayMenu, displaySongInfo, displayQueueList
+from func import displayMenu, displaySongInfo, displayQueueList, displayMessage
 from datetime import datetime, timedelta
 
 class music(commands.Cog):
@@ -79,24 +79,22 @@ class music(commands.Cog):
     if len(self.music_queue) > 0:
       try:
         self.is_playing = True
-        m_url = self.music_queue[0][0]['source']
-        m_title = self.music_queue[0][0]['title']
         self.songInfo = self.music_queue[0][0]
         self.status = discord.Status.online
-        self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(m_title))
-        self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+        self.activity = discord.Activity(type=discord.ActivityType.listening, name=str(self.music_queue[0][0]['title']))
+        self.vc.play(discord.FFmpegPCMAudio(self.music_queue[0][0]['source'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         self.music_queue.pop(0)
       except Exception:
-        self.is_playing = True
+        self.is_playing = False
     else:
-      self.checkIsPlaying()
-    
+      self.is_playing = False  
+      
   async def play_music(self):
     try:
       self.vc = await self.music_queue[0][1].connect()
-      self.play_next()
     except Exception as e:
       print(e)
+    self.play_next()
 
   async def vc_disconnect(self):
     if self.vc != "":
@@ -108,6 +106,9 @@ class music(commands.Cog):
   
   async def displayQueueList(self, queueList):
     await self.ctx.send(embed=displayQueueList(queueList))
+
+  async def displayMessage(self, title, message, color):
+    await self.ctx.send(embed=displayMessage(title, message, color))
     
   @commands.command()
   async def yumii(self, ctx):
@@ -143,12 +144,9 @@ class music(commands.Cog):
     self.ctx = ctx
     if self.vc != "":
       if len(self.music_queue) == 0:
-        await self.displayQueueList(self.music_queue) # TODO: replace this with displayWarning
-      elif len(self.music_queue) == 1:
-        await ctx.send("Add more songs to earn a skip!") # TODO: replace this with displayWarning
+        await self.displayMessage("", "Cannot skip the last song.", "red")
       else:
-        self.vc.stop()
-        self.play_next()
+        self.vc.stop() 
 
   @commands.command()
   async def P(self, ctx, *args):
