@@ -145,10 +145,7 @@ class music(commands.Cog):
   async def s(self, ctx):
     self.ctx = ctx
     if self.vc != "":
-      if len(self.music_queue) == 0:
-        await self.displayMessage("", "Cannot skip the last song.", "red")
-      else:
-        self.vc.stop() 
+      self.vc.stop() 
 
   @commands.command()
   async def P(self, ctx, *args):
