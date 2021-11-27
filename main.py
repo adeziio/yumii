@@ -27,7 +27,7 @@ async def on_ready():
   await Bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="Music"))
 
 @Bot.group(invoke_without_command=True)
-async def help(ctx):
+async def yumii(ctx):
   await ctx.send(embed=displayMenu())
 
 keep_alive()

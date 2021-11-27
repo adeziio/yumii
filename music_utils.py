@@ -3,15 +3,15 @@ import discord
 def displayMenu():
   title = "Menu 🎶🎵"
   description = ""
-  description += "`-p *song name*` <Play/add a song to music queue>" + "\n"
-  description += "`-np` <Check now playing>" + "\n"
-  description += "`-q` <Check music queue>" + "\n"
-  description += "`-skip` <Skip to next song>" + "\n"
-  description += "`-loop` <Set loop to NONE, CURRENT or PLAYLIST>" + "\n"
-  description += "`-pause` <Pause the track>" + "\n"
-  description += "`-resume` <Resume the track>" + "\n"
-  description += "`-connect` <Connect to voice channel>" + "\n"
-  description += "`-disconnect` <Disconnect from voice channel>" + "\n"
+  description += "▶ `-p *song name*` <Play/add a song to music queue>" + "\n"
+  description += "❓ `-np` <Check now playing>" + "\n"
+  description += "⌛ `-q` <Check music queue>" + "\n"
+  description += "⏩ `-skip` <Skip to next song>" + "\n"
+  description += "🔁 `-loop` <Set loop to NONE, CURRENT or PLAYLIST>" + "\n"
+  description += "⏸ `-pause` <Pause the track>" + "\n"
+  description += "⏯ `-resume` <Resume the track>" + "\n"
+  description += "🚩 `-connect` <Connect to voice channel>" + "\n"
+  description += "⛔ `-disconnect` <Disconnect from voice channel>" + "\n"
   colour = discord.Colour.blue()
   embed = discord.Embed(
           title = title,
