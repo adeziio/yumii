@@ -10,6 +10,8 @@ def displayMenu():
   description += "`-loop` <Set loop to NONE, CURRENT or PLAYLIST>" + "\n"
   description += "`-pause` <Pause the track>" + "\n"
   description += "`-resume` <Resume the track>" + "\n"
+  description += "`-connect` <Connect to voice channel>" + "\n"
+  description += "`-disconnect` <Disconnect from voice channel>" + "\n"
   colour = discord.Colour.blue()
   embed = discord.Embed(
           title = title,
