@@ -2,29 +2,26 @@
 
 ## My personal discord music bot :)
 
+### 🎶🎵 To pull up the menu
+-yumii
 
-
-### Menu 🎶🎵
-### To pull up the menu
--help
-
-### Play/add a song to music queue ▶
+### ▶ Play/add a song to music queue
 -p *song name*
-### Check now playing ❓
+### ❓ Check now playing
 -np
-### Check music queue ⌛
+### ⌛ Check music queue
 -q
-### Skip to next song ⏩
+### ⏩ Skip to next song
 -skip
-### Set loop to NONE, CURRENT or PLAYLIST 🔁
+### 🔁 Set loop to NONE, CURRENT or PLAYLIST
 -loop
-### Pause the track ⏸
+### ⏸ Pause the track
 -pause
-### Resume the track ⏯
+### ⏯ Resume the track
 -resume
-### Connect to voice channel 🚩
+### 🚩 Connect to voice channel
 -connect
-### Disconnect from voice channel ⛔
+### ⛔ Disconnect from voice channel
 -disconnect
 
 *Music bot created by Aden Tran*
