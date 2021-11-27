@@ -8,9 +8,9 @@
 ### To pull up the menu
 -help
 
-### Play/add a song to music queue ➕
+### Play/add a song to music queue ▶
 -p *song name*
-### Check now playing ▶
+### Check now playing ❓
 -np
 ### Check music queue ⌛
 -q
@@ -22,7 +22,7 @@
 -pause
 ### Resume the track ⏯
 -resume
-### Connect to voice channel ✔️
+### Connect to voice channel 🚩
 -connect
 ### Disconnect from voice channel ⛔
 -disconnect
