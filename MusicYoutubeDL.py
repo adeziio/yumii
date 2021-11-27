@@ -4,7 +4,7 @@ from youtube_dl import YoutubeDL
 from func import displayMenu, displaySongInfo, displayQueueList, displayMessage
 from datetime import datetime, timedelta
 
-class music(commands.Cog):
+class MusicYoutubeDL(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
     self.ctx = ""
