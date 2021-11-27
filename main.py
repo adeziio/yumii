@@ -5,8 +5,10 @@ import os
 import discord
 from discord.ext import commands
 from keep_alive import keep_alive
+from music_utils import displayMenu
 
 Bot = commands.Bot(command_prefix='-')
+Bot.remove_command('help')
 Bot.lava_nodes =[
   {
     'host': 'lava.link',
@@ -23,6 +25,10 @@ async def on_ready():
   print("yumii is ready!")
   Bot.load_extension('dismusic')
   await Bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="Music"))
+
+@Bot.group(invoke_without_command=True)
+async def help(ctx):
+  await ctx.send(embed=displayMenu())
 
 keep_alive()
 Bot.run(os.getenv('BOT_TOKEN'))

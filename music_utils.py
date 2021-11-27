@@ -1,14 +1,20 @@
 import discord
 
 def displayMenu():
-  description =  "To add a song ▶:\n-p *song name*\n\n"
-  description += "To skip a song ⏩:\n-s\n\n"
-  description += "To check queue list ⌛:\n-q\n\n"
-  
+  title = "Menu 🎶🎵"
+  description = ""
+  description += "`-p *song name*` <Play/add a song to music queue>" + "\n"
+  description += "`-np` <Check now playing>" + "\n"
+  description += "`-q` <Check music queue>" + "\n"
+  description += "`-skip` <Skip to next song>" + "\n"
+  description += "`-loop` <Set loop to NONE, CURRENT or PLAYLIST>" + "\n"
+  description += "`-pause` <Pause the track>" + "\n"
+  description += "`-resume` <Resume the track>" + "\n"
+  colour = discord.Colour.blue()
   embed = discord.Embed(
-          title = "Menu 🎶🎵",
+          title = title,
           description = description,
-          colour = discord.Colour.purple(),
+          colour = colour,
           )
   embed.set_footer(text="\nMusic bot created by Aden Tran\n")
   return embed
@@ -63,3 +69,5 @@ def displayMessage(title, message, color):
           )
   embed.set_footer(text="")
   return embed
+
+#  ▶ ⌛ ⏩

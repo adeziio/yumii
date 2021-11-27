@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
-from func import displayMenu, displaySongInfo, displayQueueList, displayMessage
+from MusicYoutubeDL_utils import displayMenu, displaySongInfo, displayQueueList, displayMessage
 from datetime import datetime, timedelta
 
 class MusicYoutubeDL(commands.Cog):
