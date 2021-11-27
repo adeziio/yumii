@@ -24,7 +24,7 @@ Bot.lava_nodes =[
 async def on_ready():
   print("yumii is ready!")
   Bot.load_extension('dismusic')
-  await Bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="Music"))
+  await Bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="YouTube Music"))
 
 @Bot.group(invoke_without_command=True)
 async def yumii(ctx):
