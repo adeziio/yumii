@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
-from MusicYoutubeDL_utils import displayMenu, displaySongInfo, displayQueueList, displayMessage
+from music_utils import displayMenuYoutubeDL, displaySongInfo, displayQueueList, displayMessage
 from datetime import datetime, timedelta
 
 class MusicYoutubeDL(commands.Cog):
@@ -114,7 +114,7 @@ class MusicYoutubeDL(commands.Cog):
     
   @commands.command()
   async def yumii(self, ctx):
-    await ctx.send(embed=displayMenu())
+    await ctx.send(embed=displayMenuYoutubeDL())
 
   @commands.command()
   async def p(self, ctx, *args):
