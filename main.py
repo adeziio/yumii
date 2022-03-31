@@ -32,7 +32,7 @@
 #   await ctx.send(embed=displayMenuDismusic())
 
 # keep_alive()
-# Bot.run(os.getenv('BOT_TOKEN'))
+# Bot.run(os.getenv('YUMII_TOKEN'))
 # --------------------------------------------------------------------------------------------
 
 
@@ -75,5 +75,5 @@ async def change_status():
     await musicObj.vc_disconnect()
  
 keep_alive()
-Bot.run(os.getenv('BOT_TOKEN'))
+Bot.run(os.getenv('YUMII_TOKEN'))
 # --------------------------------------------------------------------------------------------
