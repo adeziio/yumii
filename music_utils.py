@@ -37,24 +37,28 @@ def displayMenuYoutubeDL():
   return embed
 
 def displaySongInfo(status, songInfo, color):
+  print(songInfo)
   colour = discord.Colour.light_gray()
   if color == "light_gray":
     colour = discord.Colour.light_gray()
   if color == "green":
     colour = discord.Colour.green()
-  
-  title = status + " " + songInfo['duration'] + "\n\n" + songInfo['title']
+
+  statusDisplay = f"{status} {songInfo['duration']}"
+  title = f"{songInfo['title']}"
   description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n"
   description += songInfo['view_count'] + " views * " + songInfo['upload_date']
+  url=f"{songInfo['webpage_url']}"
   embed = discord.Embed(
           title = title,
+          url = url,
           description = description,
           colour = colour,
           width = 150,
           height = 150
           )
   embed.set_image(url=songInfo['thumbnail'])
-  embed.set_footer(text="")
+  embed.set_footer(text=statusDisplay)
   return embed
 
 def displayQueueList(queueList):
