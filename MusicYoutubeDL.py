@@ -132,7 +132,7 @@ class MusicYoutubeDL(commands.Cog):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
         self.music_queue.append([song, voice_channel])
-        await self.displaySongInfo("Added to queue ⌛", song, "light_gray", 0, self.music_queue)
+        await self.displaySongInfo("Add to queue ⌛", song, "light_gray", 0, self.music_queue)
         
         if self.is_playing == False:
           await self.play_music()
