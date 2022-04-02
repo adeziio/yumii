@@ -37,7 +37,6 @@ def displayMenuYoutubeDL():
   return embed
 
 def displaySongInfo(status, songInfo, color):
-  print(songInfo)
   colour = discord.Colour.light_gray()
   if color == "light_gray":
     colour = discord.Colour.light_gray()

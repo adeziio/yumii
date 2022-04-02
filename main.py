@@ -57,8 +57,8 @@ Bot.add_cog(musicObj)
 async def on_ready():
   print("yumii is ready!")
   change_status.start()
-
-@tasks.loop(seconds=5)
+  
+@tasks.loop(seconds=1)
 async def change_status():
   global musicObjstatus
   global musicObjActivity
