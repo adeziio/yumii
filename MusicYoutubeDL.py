@@ -16,6 +16,7 @@ class MusicYoutubeDL(commands.Cog):
     self.status = discord.Status.online
     self.activity = discord.Activity(type=discord.ActivityType.listening, name="Spotify")
     self.songInfo = {}
+    self.currentDisplay = None
   
   def getSongInfo(self):
     return self.songInfo
@@ -103,8 +104,8 @@ class MusicYoutubeDL(commands.Cog):
       await self.vc.disconnect()
       self.vc = ""
     
-  async def displaySongInfo(self, status, song, color):
-    await self.ctx.send(embed=displaySongInfo(status, song, color))
+  async def displaySongInfo(self, status, song, color, timestamp, musicQueue):
+    self.currentDisplay = await self.ctx.send(embed=displaySongInfo(status, song, color, timestamp, musicQueue))
   
   async def displayQueueList(self, queueList):
     await self.ctx.send(embed=displayQueueList(queueList))
@@ -130,8 +131,8 @@ class MusicYoutubeDL(commands.Cog):
       if type(song) == type(True):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
-        await self.displaySongInfo("Added to queue ⌛", song, "light_gray")
         self.music_queue.append([song, voice_channel])
+        await self.displaySongInfo("Added to queue ⌛", song, "light_gray", 0, self.music_queue)
         
         if self.is_playing == False:
           await self.play_music()

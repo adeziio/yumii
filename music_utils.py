@@ -1,4 +1,5 @@
 import discord
+import time
 
 def displayMenuDismusic():
   title = "Menu 🎶🎵"
@@ -36,16 +37,26 @@ def displayMenuYoutubeDL():
   embed.set_footer(text="\nMusic bot created by Aden Tran\n")
   return embed
 
-def displaySongInfo(status, songInfo, color):
+def displaySongInfo(status, songInfo, color, timestamp, musicQueue):
   colour = discord.Colour.light_gray()
   if color == "light_gray":
     colour = discord.Colour.light_gray()
   if color == "green":
     colour = discord.Colour.green()
 
-  statusDisplay = f"{status} {songInfo['duration']}"
+  queueList = "Up next ⌛\n\n"
+  if (musicQueue):
+    if len(musicQueue) > 0:
+      for i in range(0, len(musicQueue)):
+        queueList += "\t" + str(i+1) + ". *" + musicQueue[i][0]['title'] + "*\n"
+    else:
+      queueList = "Music queue is empty."
+  else:
+    queueList = "Music queue is empty."
+  
+
   title = f"{songInfo['title']}"
-  description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n"
+  description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n" if songInfo['album'] else ""
   description += songInfo['view_count'] + " views * " + songInfo['upload_date']
   url=f"{songInfo['webpage_url']}"
   embed = discord.Embed(
@@ -56,8 +67,16 @@ def displaySongInfo(status, songInfo, color):
           width = 150,
           height = 150
           )
+  currentTime = time.strftime('%H:%M:%S', time.gmtime(timestamp))
+  maxDuration = timeStrToNum(songInfo['duration'])
+  leadingZero = '0' if len(songInfo['duration'])==7 else ''
+
+  redProgress = '🟥' * int(1+(timestamp/maxDuration)*23)
+  whiteProgress = '⬜' * int(23-(timestamp/maxDuration)*23)
+  footer = f"{status}\t\t\t\t\t\t\t\t\t\t{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
+  
   embed.set_image(url=songInfo['thumbnail'])
-  embed.set_footer(text=statusDisplay)
+  embed.set_footer(text=footer)
   return embed
 
 def displayQueueList(queueList):
@@ -89,5 +108,10 @@ def displayMessage(title, message, color):
           )
   embed.set_footer(text="")
   return embed
+
+def timeStrToNum(timeStr):
+  h, m, s = timeStr.split(':')
+  timeNum = int(h) * 3600 + int(m) * 60 + int(s)
+  return timeNum
 
 #  ▶ ⌛ ⏩

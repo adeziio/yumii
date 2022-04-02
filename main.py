@@ -43,13 +43,15 @@ import os
 import discord
 from discord.ext import commands, tasks
 from MusicYoutubeDL import MusicYoutubeDL
+from music_utils import displaySongInfo, timeStrToNum
+import time
 from keep_alive import keep_alive
 
 Bot = commands.Bot(command_prefix='-')
 musicObj = MusicYoutubeDL(Bot)
 musicObjstatus = musicObj.getStatus()
 musicObjActivity = musicObj.getActivity()
-counter = 0
+timestamp = 0
 
 Bot.add_cog(musicObj)
 
@@ -62,18 +64,28 @@ async def on_ready():
 async def change_status():
   global musicObjstatus
   global musicObjActivity
-  global counter
+  global timestamp
+  timestamp += 1
+
+  musicQueue = musicObj.music_queue if musicObj.music_queue else None
 
   if musicObjstatus != musicObj.getStatus() or musicObjActivity != musicObj.getActivity():
     musicObjstatus = musicObj.getStatus()
     musicObjActivity = musicObj.getActivity()
+    timestamp = 0
     await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
-    await musicObj.displaySongInfo("Now Playing ▶️", musicObj.getSongInfo(), "green")
-
-  if musicObj.getIsPlaying() == False:
-    await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="Spotify"))
-    await musicObj.vc_disconnect()
+    await musicObj.displaySongInfo("Now Playing ▶️", musicObj.getSongInfo(), "green", timestamp, musicQueue)
  
+  if musicObj.getIsPlaying() == False:
+    timestamp = 0
+    if (musicObj.currentDisplay):
+      maxDuration = timeStrToNum(musicObj.getSongInfo()['duration'])
+      await musicObj.currentDisplay.edit(embed=displaySongInfo("Now Playing ▶️", musicObj.getSongInfo(), "green", maxDuration, musicQueue))
+    await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="YouTube Music"))
+    await musicObj.vc_disconnect()
+  else:
+    await musicObj.currentDisplay.edit(embed=displaySongInfo("Now Playing ▶️", musicObj.getSongInfo(), "green", timestamp, musicQueue))
+
 keep_alive()
 Bot.run(os.getenv('YUMII_TOKEN'))
 # --------------------------------------------------------------------------------------------
