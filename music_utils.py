@@ -26,7 +26,6 @@ def displayMenuYoutubeDL():
   title = "Menu 🎶🎵"
   description = ""
   description += "▶ `-p *song name*` <Play/add a song to music queue>" + "\n"
-  description += "⌛ `-q` <Check music queue>" + "\n"
   description += "⏩ `-s` <Skip to next song>" + "\n"
   colour = discord.Colour.blue()
   embed = discord.Embed(
@@ -44,69 +43,51 @@ def displaySongInfo(status, songInfo, color, timestamp, musicQueue):
   if color == "green":
     colour = discord.Colour.green()
 
-  queueList = "Up next ⌛\n\n"
+  if ("New session started!" in status):
+    embed = discord.Embed(
+            colour = colour
+            )
+    footer = f"{status}"
+    embed.set_footer(text=footer)
+    return embed
+    
+
+  queueList = "Up next⌛\n\n"
   if (musicQueue):
     if len(musicQueue) > 0:
       for i in range(0, len(musicQueue)):
         queueList += "\t" + str(i+1) + ". *" + musicQueue[i][0]['title'] + "*\n"
     else:
-      queueList = "Music queue is empty."
+      queueList = ""
   else:
-    queueList = "Music queue is empty."
-  
+    queueList = ""
 
   title = f"{songInfo['title']}"
-  description = songInfo['artist'] + "\n\n" + songInfo['album'] + "\n\n" if songInfo['album'] else ""
+  description = (songInfo['artist'] + "\n\n" if songInfo['artist'] else "")
+  description += (songInfo['album'] + "\n\n" if songInfo['album'] else "")
   description += songInfo['view_count'] + " views * " + songInfo['upload_date']
   url=f"{songInfo['webpage_url']}"
   embed = discord.Embed(
           title = title,
           url = url,
           description = description,
-          colour = colour,
-          width = 150,
-          height = 150
+          colour = colour
           )
   currentTime = time.strftime('%H:%M:%S', time.gmtime(timestamp))
   maxDuration = timeStrToNum(songInfo['duration'])
   leadingZero = '0' if len(songInfo['duration'])==7 else ''
 
-  redProgress = '🟥' * int(1+(timestamp/maxDuration)*23)
-  whiteProgress = '⬜' * int(23-(timestamp/maxDuration)*23)
-  footer = f"{status}\t\t\t\t\t\t\t\t\t\t{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
-  
+  redProgress = ''
+  whiteProgress = '⬜' * 20
+  footer = f"{status}"
+  if (timestamp > 0):
+    redProgress = '🟥' * int((timestamp/maxDuration)*20)
+    whiteProgress = '⬜' * int(21-(timestamp/maxDuration)*20)
+    footer = f"{status}\t\t\t\t\t\t\t{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
+
+  embed.set_thumbnail(url="https://c.tenor.com/HJvqN2i4Zs4AAAAi/milk-and-mocha-cute.gif")
   embed.set_image(url=songInfo['thumbnail'])
   embed.set_footer(text=footer)
-  return embed
-
-def displayQueueList(queueList):
-  title = "Up next ⌛\n\n"
-  description = ""
-  if len(queueList) > 0:
-    for i in range(0, len(queueList)):
-      description += str(i+1) + ". *" + queueList[i][0]['title'] + "*\n"
-  else:
-    description = "Music queue is empty."
-  embed = discord.Embed(
-          title = title,
-          description = description,
-          colour = discord.Colour.blue()
-          )
-  embed.set_footer(text="")
-  return embed
-
-def displayMessage(title, message, color):
-  colour = discord.Colour.red()
-  if color == "red":
-    colour = discord.Colour.red()
-  title = title
-  description = message
-  embed = discord.Embed(
-          title = title,
-          description = description,
-          colour = colour,
-          )
-  embed.set_footer(text="")
   return embed
 
 def timeStrToNum(timeStr):

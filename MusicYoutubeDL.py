@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
-from music_utils import displayMenuYoutubeDL, displaySongInfo, displayQueueList, displayMessage
+from music_utils import displayMenuYoutubeDL, displaySongInfo
 from datetime import datetime, timedelta
 
 class MusicYoutubeDL(commands.Cog):
@@ -100,18 +100,11 @@ class MusicYoutubeDL(commands.Cog):
   async def vc_disconnect(self):
     if self.vc != "":
       self.vc.stop()
-      await self.displayMessage("", "Music queue is empty, good bye...", "red")
       await self.vc.disconnect()
       self.vc = ""
     
   async def displaySongInfo(self, status, song, color, timestamp, musicQueue):
     self.currentDisplay = await self.ctx.send(embed=displaySongInfo(status, song, color, timestamp, musicQueue))
-  
-  async def displayQueueList(self, queueList):
-    await self.ctx.send(embed=displayQueueList(queueList))
-
-  async def displayMessage(self, title, message, color):
-    await self.ctx.send(embed=displayMessage(title, message, color))
     
   @commands.command()
   async def yumii(self, ctx):
@@ -132,16 +125,11 @@ class MusicYoutubeDL(commands.Cog):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
         self.music_queue.append([song, voice_channel])
-        await self.displaySongInfo("Add to queue ⌛", song, "light_gray", 0, self.music_queue)
+        await self.displaySongInfo("New session started!", song, "light_gray", 0, None)
         
         if self.is_playing == False:
           await self.play_music()
   
-  @commands.command()
-  async def q(self, ctx):
-    self.ctx = ctx
-    await self.displayQueueList(self.music_queue)
-
   @commands.command()
   async def s(self, ctx):
     self.ctx = ctx
@@ -151,10 +139,6 @@ class MusicYoutubeDL(commands.Cog):
   @commands.command()
   async def P(self, ctx, *args):
     await self.p(ctx, *args)
-
-  @commands.command()
-  async def Q(self, ctx, *args):
-    await self.q(ctx, *args)
 
   @commands.command()
   async def S(self, ctx, *args):
