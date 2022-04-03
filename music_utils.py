@@ -80,10 +80,10 @@ def displaySongInfo(songInfo, color, timestamp, musicQueue=None):
   whiteProgress = '⬜' * numSquare
 
   if (timestamp == maxDuration):
-    redProgress = '🟥' * numSquare
+    redProgress = '🍆' * numSquare
     whiteProgress = ''
   elif (timestamp > 0):
-    redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
+    redProgress = '🍆' * int((timestamp/maxDuration)*numSquare)
     whiteProgress = '⬜' * int((numSquare+1)-(timestamp/maxDuration)*numSquare)
   footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 

@@ -79,9 +79,9 @@ async def change_status():
   if musicObj.getIsPlaying() == False:
     timestamp = 0
     if (musicObj.currentDisplay):
-      if (musicObj.getSongInfo()['duration']):
+      try:
         maxDuration = timeStrToNum(musicObj.getSongInfo()['duration'])
-      else:
+      except:
         maxDuration = 0
       await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", maxDuration, musicQueue))
     await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="YouTube Music"))
