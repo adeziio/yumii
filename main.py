@@ -74,18 +74,17 @@ async def change_status():
     musicObjActivity = musicObj.getActivity()
     timestamp = 0
     await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
-    await musicObj.displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue)
+    await musicObj.displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, "")
  
   if musicObj.getIsPlaying() == False:
     timestamp = 0
     if (musicObj.currentDisplay):
       if (musicObj.getSongInfo()):
-        maxDuration = timeStrToNum(musicObj.getSongInfo()['duration'])
-        await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", maxDuration, musicQueue))
+        await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "orange", 0, None, "Music session ended."))
     await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="YouTube Music"))
     await musicObj.vc_disconnect()
   else:
-    await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue))
+    await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, ""))
 
 keep_alive()
 Bot.run(os.getenv('YUMII_TOKEN'))

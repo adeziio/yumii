@@ -36,14 +36,17 @@ def displayMenuYoutubeDL():
   embed.set_footer(text="\nMusic bot created by Aden Tran\n")
   return embed
 
-def displaySongInfo(songInfo, color, timestamp, musicQueue=None):
+def displaySongInfo(songInfo, color, timestamp, musicQueue=None, customMsg=""):
   colour = discord.Colour.light_gray()
   if color == "orange":
     colour = discord.Colour.orange()
     embed = discord.Embed(
             colour = colour
             ) 
-    embed.add_field(name="🔊", value="New music session started!", inline=False)
+    if (customMsg == "New music session started!"):
+      embed.add_field(name="🔊", value=customMsg, inline=False)
+    elif (customMsg == "Music session ended."):
+      embed.add_field(name="🔈", value=customMsg, inline=False)
     return embed
   elif color == "green":
     colour = discord.Colour.green()  
@@ -80,10 +83,10 @@ def displaySongInfo(songInfo, color, timestamp, musicQueue=None):
   whiteProgress = '⬜' * numSquare
 
   if (timestamp == maxDuration):
-    redProgress = '🍆' * numSquare
+    redProgress = '🟥' * numSquare
     whiteProgress = ''
   elif (timestamp > 0):
-    redProgress = '🍆' * int((timestamp/maxDuration)*numSquare)
+    redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
     whiteProgress = '⬜' * int((numSquare+1)-(timestamp/maxDuration)*numSquare)
   footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 
