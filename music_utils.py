@@ -67,25 +67,28 @@ def displaySongInfo(songInfo, color, timestamp, musicQueue=None):
           title = title,
           url = url,
           description = description,
-          colour = colour
+          colour = colour,
+          width = 500,
+          height = 500
           )
   currentTime = time.strftime('%H:%M:%S', time.gmtime(timestamp))
   maxDuration = timeStrToNum(songInfo['duration'])
   leadingZero = '0' if len(songInfo['duration'])==7 else ''
 
+  numSquare = 20
   redProgress = ''
-  whiteProgress = '⬜' * 20
+  whiteProgress = '⬜' * numSquare
 
   if (timestamp == maxDuration):
-    redProgress = '🟥' * 20
+    redProgress = '🟥' * numSquare
     whiteProgress = ''
   elif (timestamp > 0):
-    redProgress = '🟥' * int((timestamp/maxDuration)*20)
-    whiteProgress = '⬜' * int(21-(timestamp/maxDuration)*20)
+    redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
+    whiteProgress = '⬜' * int((numSquare+1)-(timestamp/maxDuration)*numSquare)
   footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 
-  embed.set_thumbnail(url="https://c.tenor.com/HJvqN2i4Zs4AAAAi/milk-and-mocha-cute.gif")
-  embed.set_image(url=songInfo['thumbnail'])
+  embed.set_thumbnail(url=songInfo['thumbnail'])
+  embed.set_image(url="https://c.tenor.com/EnVuJT_ETZMAAAAi/turntable-%E3%83%95%E3%82%B8%E3%83%AD%E3%83%83%E3%82%AF.gif")
   embed.set_footer(text=footer)
   return embed
 
