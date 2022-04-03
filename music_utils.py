@@ -87,7 +87,7 @@ def displaySongInfo(songInfo, color, timestamp, musicQueue=None, customMsg=""):
     whiteProgress = ''
   elif (timestamp > 0):
     redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
-    whiteProgress = '⬜' * int((numSquare+1)-(timestamp/maxDuration)*numSquare)
+    whiteProgress = '⬜' * int((numSquare)-(timestamp/maxDuration)*numSquare)
   footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 
   embed.set_thumbnail(url=songInfo['thumbnail'])
