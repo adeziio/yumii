@@ -103,8 +103,8 @@ class MusicYoutubeDL(commands.Cog):
       await self.vc.disconnect()
       self.vc = ""
     
-  async def displaySongInfo(self, status, song, color, timestamp, musicQueue):
-    self.currentDisplay = await self.ctx.send(embed=displaySongInfo(status, song, color, timestamp, musicQueue))
+  async def displaySongInfo(self, song, color, timestamp, musicQueue):
+    self.currentDisplay = await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue))
     
   @commands.command()
   async def yumii(self, ctx):
@@ -125,7 +125,7 @@ class MusicYoutubeDL(commands.Cog):
         await ctx.send("Could not download the song. Incorrect format.")
       else:
         self.music_queue.append([song, voice_channel])
-        await self.displaySongInfo("New session started!", song, "light_gray", 0, None)
+        await self.displaySongInfo(song, "orange", 0, None)
         
         if self.is_playing == False:
           await self.play_music()

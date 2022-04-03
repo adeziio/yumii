@@ -36,27 +36,23 @@ def displayMenuYoutubeDL():
   embed.set_footer(text="\nMusic bot created by Aden Tran\n")
   return embed
 
-def displaySongInfo(status, songInfo, color, timestamp, musicQueue):
+def displaySongInfo(songInfo, color, timestamp, musicQueue=None):
   colour = discord.Colour.light_gray()
-  if color == "light_gray":
-    colour = discord.Colour.light_gray()
-  if color == "green":
-    colour = discord.Colour.green()
-
-  if ("New session started!" in status):
+  if color == "orange":
+    colour = discord.Colour.orange()
     embed = discord.Embed(
             colour = colour
-            )
-    footer = f"{status}"
-    embed.set_footer(text=footer)
+            ) 
+    embed.add_field(name="🔊", value="New music session started!", inline=False)
     return embed
-    
+  elif color == "green":
+    colour = discord.Colour.green()  
 
-  queueList = "Up next⌛\n\n"
+  queueList = "Up next ⌛:\n\n"
   if (musicQueue):
     if len(musicQueue) > 0:
       for i in range(0, len(musicQueue)):
-        queueList += "\t" + str(i+1) + ". *" + musicQueue[i][0]['title'] + "*\n"
+        queueList += "\t" + str(i+1) + ". " + musicQueue[i][0]['title'] + "\n"
     else:
       queueList = ""
   else:
@@ -79,11 +75,14 @@ def displaySongInfo(status, songInfo, color, timestamp, musicQueue):
 
   redProgress = ''
   whiteProgress = '⬜' * 20
-  footer = f"{status}"
-  if (timestamp > 0):
+
+  if (timestamp == maxDuration):
+    redProgress = '🟥' * 20
+    whiteProgress = ''
+  elif (timestamp > 0):
     redProgress = '🟥' * int((timestamp/maxDuration)*20)
     whiteProgress = '⬜' * int(21-(timestamp/maxDuration)*20)
-    footer = f"{status}\t\t\t\t\t\t\t{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
+  footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 
   embed.set_thumbnail(url="https://c.tenor.com/HJvqN2i4Zs4AAAAi/milk-and-mocha-cute.gif")
   embed.set_image(url=songInfo['thumbnail'])
