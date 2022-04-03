@@ -7,8 +7,7 @@
 
 ### ▶ Play/add a song to music queue:
 -p *song name*
-### ⌛ Check music queue:
--q
+
 ### ⏩ Skip to next song:
 -s
 
