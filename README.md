@@ -13,5 +13,5 @@
 
 *Music bot created by Aden Tran*
 
-# Demo:
-![3D2BE39F-E253-4C4A-AFB4-3A873404A5B1](https://user-images.githubusercontent.com/47045532/169479670-01614de9-4edc-4332-b503-d4289f106959.png)
+![C4A441DF-6171-48F4-8BA9-92F323017279](https://user-images.githubusercontent.com/47045532/169597225-1a4cdd4d-5157-40a3-8b27-d9a701006e4f.jpeg)
+![5596F7A4-3955-4C56-BE6E-D1A9E90B502E](https://user-images.githubusercontent.com/47045532/169597228-7c9c0e02-d93f-409f-835d-b22ff2411b6a.jpeg)
