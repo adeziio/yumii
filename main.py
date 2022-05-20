@@ -15,7 +15,7 @@ Bot.add_cog(musicObj)
 
 @Bot.event
 async def on_ready():
-    print("yumii is ready!")
+    print("yumii is online!")
     change_status.start()
 
 
