@@ -26,23 +26,38 @@ async def change_status():
     global timestamp
     timestamp += 1
 
-    musicQueue = musicObj.music_queue if musicObj.music_queue else None
+    musicQueue = musicObj.music_queue if musicObj.music_queue else []
 
     if musicObjstatus != musicObj.getStatus() or musicObjActivity != musicObj.getActivity():
         musicObjstatus = musicObj.getStatus()
         musicObjActivity = musicObj.getActivity()
         timestamp = 0
         await Bot.change_presence(status=musicObj.getStatus(), activity=musicObj.getActivity())
-        await musicObj.displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, "")
+        if (musicObj.currentDisplay is not None):
+            try:
+                await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, ""))
+            except:
+                currentDisplay = await musicObj.displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, "")
+                musicObj.setCurrentDisplay(currentDisplay)
+        else:
+            currentDisplay = await musicObj.displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, "")
+            musicObj.setCurrentDisplay(currentDisplay)
 
     if musicObj.getIsPlaying() == False:
         timestamp = 0
-        if (musicObj.currentDisplay):
+        if (musicObj.currentDisplay is not None):
             if (musicObj.getSongInfo()):
-                await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "orange", 0, None, "Music session ended."))
+                try:
+                    await musicObj.currentDisplay.delete()
+                except:
+                    None
         await Bot.change_presence(status=musicObj.getStatus(), activity=discord.Activity(type=discord.ActivityType.listening, name="YouTube Music"))
+        musicObj.setCurrentDisplay(None)
         await musicObj.vc_disconnect()
     else:
-        await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, ""))
+        try:
+            await musicObj.currentDisplay.edit(embed=displaySongInfo(musicObj.getSongInfo(), "green", timestamp, musicQueue, ""))
+        except:
+            None
 
 Bot.run(os.getenv('YUMII_TOKEN'))

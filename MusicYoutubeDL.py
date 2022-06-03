@@ -39,6 +39,9 @@ class MusicYoutubeDL(commands.Cog):
     def setVC(self, vc):
         self.vc = vc
 
+    def setCurrentDisplay(self, newCurrentDisplay):
+        self.currentDisplay = newCurrentDisplay
+
     def search_yt(self, item):
         with YoutubeDL(self.YDL_OPTIONS) as ydl:
             try:
@@ -99,18 +102,17 @@ class MusicYoutubeDL(commands.Cog):
     async def play_music(self):
         try:
             self.vc = await self.music_queue[0][1].connect()
+            self.play_next()
         except Exception as e:
             print(e)
-        self.play_next()
 
     async def vc_disconnect(self):
         if self.vc != "":
             self.vc.stop()
             await self.vc.disconnect()
-            self.vc = ""
 
     async def displaySongInfo(self, song, color, timestamp, musicQueue, customMsg):
-        self.currentDisplay = await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg))
+        return await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg))
 
     @commands.command()
     async def yumii(self, ctx):
@@ -119,32 +121,36 @@ class MusicYoutubeDL(commands.Cog):
     @commands.command()
     async def p(self, ctx, *args):
         self.ctx = ctx
+        await ctx.message.delete()
         query = " ".join(args)
         voice_channel = ""
         try:
             voice_channel = ctx.author.voice.channel
         except Exception:
-            await ctx.send("Connect to a voice channel!")
+            await self.displaySongInfo(None, "red", 0, [], "Connect to a voice channel!")
         if voice_channel != "":
             song = self.search_yt(query)
             if type(song) == type(True):
-                await ctx.send("Could not download the song. Incorrect format.")
+                await self.displaySongInfo(None, "red", 0, [], "Could not download the song. Incorrect format.")
             else:
                 self.music_queue.append([song, voice_channel])
-                await self.displaySongInfo(song, "orange", 0, None, "New music session started!")
                 if self.is_playing == False:
                     await self.play_music()
 
     @commands.command()
-    async def s(self, ctx):
-        self.ctx = ctx
+    async def skip(self, ctx):
+        await ctx.message.delete()
         if self.vc != "":
             self.vc.stop()
+        if len(self.music_queue) == 0:
+            await self.vc.disconnect()
+        await self.currentDisplay.delete()
 
     @commands.command()
-    async def P(self, ctx, *args):
-        await self.p(ctx, *args)
-
-    @commands.command()
-    async def S(self, ctx, *args):
-        await self.s(ctx, *args)
+    async def stop(self, ctx):
+        await ctx.message.delete()
+        if self.vc != "":
+            self.vc.stop()
+        self.music_queue = []
+        await self.vc.disconnect()
+        await self.currentDisplay.delete()

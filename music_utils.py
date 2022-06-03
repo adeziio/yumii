@@ -39,68 +39,73 @@ def displayMenuYoutubeDL():
     return embed
 
 
-def displaySongInfo(songInfo, color, timestamp, musicQueue=None, customMsg=""):
+def displaySongInfo(songInfo, color, timestamp, musicQueue, customMsg=""):
     colour = discord.Colour.light_gray()
-    if color == "orange":
+    if color == "red":
+        colour = discord.Colour.red()
+        embed = discord.Embed(
+            colour=colour
+        )
+        embed.add_field(name="❌", value=customMsg, inline=False)
+        return embed
+    elif color == "orange":
         colour = discord.Colour.orange()
         embed = discord.Embed(
             colour=colour
         )
-        if (customMsg == "New music session started!"):
-            embed.add_field(name="🔊", value=customMsg, inline=False)
-        elif (customMsg == "Music session ended."):
-            embed.add_field(name="🔈", value=customMsg, inline=False)
+        embed.add_field(name="⌛", value=customMsg, inline=False)
         return embed
     elif color == "green":
         colour = discord.Colour.green()
+        if (songInfo):
+            title = f"{songInfo['title']}"
+            description = (songInfo['artist'] +
+                           "\n\n" if songInfo['artist'] else "")
+            description += (songInfo['album'] +
+                            "\n\n" if songInfo['album'] else "")
+            description += songInfo['view_count'] + \
+                " views * " + songInfo['upload_date']
+            url = f"{songInfo['webpage_url']}"
+            embed = discord.Embed(
+                title=title,
+                url=url,
+                description=description,
+                colour=colour,
+                width=500,
+                height=500
+            )
+            currentTime = time.strftime('%H:%M:%S', time.gmtime(timestamp))
+            maxDuration = timeStrToNum(songInfo['duration'])
+            leadingZero = '0' if len(songInfo['duration']) == 7 else ''
 
-    queueList = "Up next ⌛:\n\n"
-    if (musicQueue):
-        if len(musicQueue) > 0:
-            for i in range(0, len(musicQueue)):
-                queueList += "\t" + str(i+1) + ". " + \
-                    musicQueue[i][0]['title'] + "\n"
-        else:
-            queueList = ""
-    else:
-        queueList = ""
+            numSquare = 20
+            redProgress = ''
+            whiteProgress = '⬜' * (numSquare-1)
 
-    title = f"{songInfo['title']}"
-    description = (songInfo['artist'] + "\n\n" if songInfo['artist'] else "")
-    description += (songInfo['album'] + "\n\n" if songInfo['album'] else "")
-    description += songInfo['view_count'] + \
-        " views * " + songInfo['upload_date']
-    url = f"{songInfo['webpage_url']}"
-    embed = discord.Embed(
-        title=title,
-        url=url,
-        description=description,
-        colour=colour,
-        width=500,
-        height=500
-    )
-    currentTime = time.strftime('%H:%M:%S', time.gmtime(timestamp))
-    maxDuration = timeStrToNum(songInfo['duration'])
-    leadingZero = '0' if len(songInfo['duration']) == 7 else ''
+            if (timestamp == maxDuration):
+                redProgress = '🟥' * numSquare
+                whiteProgress = ''
+            elif (timestamp > 0):
+                redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
+                whiteProgress = '⬜' * \
+                    int((numSquare-1)-(timestamp/maxDuration)*(numSquare))
 
-    numSquare = 20
-    redProgress = ''
-    whiteProgress = '⬜' * (numSquare-1)
+            queueList = "Up next ⌛:\n\n"
+            if len(musicQueue) > 0:
+                for i in range(0, len(musicQueue)):
+                    queueList += (" → " if i == 0 else "") + \
+                        "\t" + musicQueue[i][0]['title'] + "\n"
+            else:
+                queueList = ""
 
-    if (timestamp == maxDuration):
-        redProgress = '🟥' * numSquare
-        whiteProgress = ''
-    elif (timestamp > 0):
-        redProgress = '🟥' * int((timestamp/maxDuration)*numSquare)
-        whiteProgress = '⬜' * \
-            int((numSquare-1)-(timestamp/maxDuration)*(numSquare))
-    footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
+            footer = f"{currentTime} / {leadingZero}{songInfo['duration']}\n\n{redProgress}{whiteProgress}\n\n{queueList}"
 
-    embed.set_thumbnail(url=songInfo['thumbnail'])
-    embed.set_image(
-        url="https://c.tenor.com/EnVuJT_ETZMAAAAi/turntable-%E3%83%95%E3%82%B8%E3%83%AD%E3%83%83%E3%82%AF.gif")
-    embed.set_footer(text=footer)
-    return embed
+            embed.set_thumbnail(url=songInfo['thumbnail'])
+            embed.set_image(
+                url="https://c.tenor.com/EnVuJT_ETZMAAAAi/turntable-%E3%83%95%E3%82%B8%E3%83%AD%E3%83%83%E3%82%AF.gif")
+            embed.set_footer(text=footer)
+            return embed
+    return None
 
 
 def timeStrToNum(timeStr):
