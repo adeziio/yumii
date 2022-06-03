@@ -5,11 +5,14 @@
 ### 🎶🎵 To pull up the menu:
 -yumii
 
-### ▶ Play/add a song to music queue:
+### ▶ play/add a song to music queue:
 -p *song name*
 
-### ⏩ Skip to next song:
--s
+### ⏩ skip to next song:
+-skip
+
+### 🟥 stop and disconnect:
+-stop
 
 *Music bot created by Aden Tran*
 

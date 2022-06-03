@@ -111,11 +111,12 @@ class MusicYoutubeDL(commands.Cog):
             self.vc.stop()
             await self.vc.disconnect()
 
-    async def displaySongInfo(self, song, color, timestamp, musicQueue, customMsg):
-        return await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg))
+    async def displaySongInfo(self, song, color, timestamp, musicQueue, customMsg, deleteAfter=None):
+        return await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg), delete_after=deleteAfter)
 
     @commands.command()
     async def yumii(self, ctx):
+        await ctx.message.delete()
         await ctx.send(embed=displayMenuYoutubeDL())
 
     @commands.command()
@@ -127,11 +128,11 @@ class MusicYoutubeDL(commands.Cog):
         try:
             voice_channel = ctx.author.voice.channel
         except Exception:
-            await self.displaySongInfo(None, "red", 0, [], "Connect to a voice channel!")
+            await self.displaySongInfo(None, "red", 0, [], "Please join a voice channel!", 5)
         if voice_channel != "":
             song = self.search_yt(query)
             if type(song) == type(True):
-                await self.displaySongInfo(None, "red", 0, [], "Could not download the song. Incorrect format.")
+                await self.displaySongInfo(None, "red", 0, [], "Could not download the song. Incorrect format.", 5)
             else:
                 self.music_queue.append([song, voice_channel])
                 if self.is_playing == False:
