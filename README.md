@@ -11,7 +11,7 @@
 ### ⏩ skip to next song:
 -skip
 
-### 🟥 stop and disconnect:
+### 🛑 stop and disconnect:
 -stop
 
 *Music Bot created by Aden Tran*

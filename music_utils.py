@@ -29,7 +29,7 @@ def displayMenuYoutubeDL():
     description = ""
     description += "▶ `-p *song name*` <play/add a song to music queue>" + "\n"
     description += "⏩ `-skip` <skip to next song>" + "\n"
-    description += "⏩ `-stop` <stop and disconnect>" + "\n"
+    description += "🛑 `-stop` <stop and disconnect>" + "\n"
     colour = discord.Colour.blue()
     embed = discord.Embed(
         title=title,
