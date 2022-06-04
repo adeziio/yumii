@@ -104,5 +104,3 @@ def timeStrToNum(timeStr):
     h, m, s = timeStr.split(':')
     timeNum = int(h) * 3600 + int(m) * 60 + int(s)
     return timeNum
-
-#  ▶ ⌛ ⏩
