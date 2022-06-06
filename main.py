@@ -12,13 +12,13 @@ musicObjActivity = musicObj.getActivity()
 timestamp = 0
 
 Bot.add_cog(musicObj)
+DiscordComponents(Bot)
 
 
 @Bot.event
 async def on_ready():
     print("yumii is online!")
     change_status.start()
-    DiscordComponents(Bot)
 
 
 @Bot.event
