@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands, tasks
 from MusicYoutubeDL import MusicYoutubeDL
 from music_utils import displaySongInfo
+from discord_components import DiscordComponents
 
 Bot = commands.Bot(command_prefix='-')
 musicObj = MusicYoutubeDL(Bot)
@@ -17,6 +18,18 @@ Bot.add_cog(musicObj)
 async def on_ready():
     print("yumii is online!")
     change_status.start()
+    DiscordComponents(Bot)
+
+
+@Bot.event
+async def on_button_click(interaction):
+    if interaction.component.custom_id == "stop_button":
+        await musicObj.stopButton()
+    elif interaction.component.custom_id == "pause_resume_button":
+        musicObj.togglePauseResumeButton()
+        await interaction.respond(content="Pause" if musicObj.is_paused else "Resume")
+    elif interaction.component.custom_id == "skip_button":
+        await musicObj.skipButton()
 
 
 @tasks.loop(seconds=1)
@@ -24,7 +37,10 @@ async def change_status():
     global musicObjstatus
     global musicObjActivity
     global timestamp
-    timestamp += 1
+    if musicObj.is_paused:
+        return
+    else:
+        timestamp += 1
 
     musicQueue = musicObj.music_queue if musicObj.music_queue else []
 

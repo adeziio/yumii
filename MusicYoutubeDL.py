@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord_components import Button
 from youtube_dl import YoutubeDL
 from music_utils import displayMenuYoutubeDL, displaySongInfo
 from datetime import datetime, timedelta
@@ -20,6 +21,7 @@ class MusicYoutubeDL(commands.Cog):
             type=discord.ActivityType.listening, name="Spotify")
         self.songInfo = {}
         self.currentDisplay = None
+        self.is_paused = False
 
     def getSongInfo(self):
         return self.songInfo
@@ -112,7 +114,35 @@ class MusicYoutubeDL(commands.Cog):
             await self.vc.disconnect()
 
     async def displaySongInfo(self, song, color, timestamp, musicQueue, customMsg, deleteAfter=None):
-        return await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg), delete_after=deleteAfter)
+        buttons = [[
+            Button(style=2, label="🛑", custom_id="stop_button"),
+            Button(style=2, label="⏯️", custom_id="pause_resume_button"),
+            Button(style=2, label="⏩", custom_id="skip_button")
+        ]]
+        return await self.ctx.send(embed=displaySongInfo(song, color, timestamp, musicQueue, customMsg), delete_after=deleteAfter, components=buttons)
+
+    async def stopButton(self):
+        if self.vc != "":
+            self.vc.stop()
+        self.music_queue = []
+        await self.vc.disconnect()
+        await self.currentDisplay.delete()
+
+    def togglePauseResumeButton(self):
+        if self.vc != "":
+            if self.is_paused:
+                self.vc.resume()
+                self.is_paused = False
+            else:
+                self.vc.pause()
+                self.is_paused = True
+
+    async def skipButton(self):
+        if self.vc != "":
+            self.vc.stop()
+        if len(self.music_queue) == 0:
+            await self.vc.disconnect()
+        await self.currentDisplay.delete()
 
     @commands.command()
     async def yumii(self, ctx):
@@ -155,3 +185,13 @@ class MusicYoutubeDL(commands.Cog):
         self.music_queue = []
         await self.vc.disconnect()
         await self.currentDisplay.delete()
+
+    @commands.command()
+    async def pause(self, ctx):
+        await ctx.message.delete()
+        self.togglePauseResumeButton()
+
+    @commands.command()
+    async def resume(self, ctx):
+        await ctx.message.delete()
+        self.togglePauseResumeButton()
