@@ -5,7 +5,7 @@ import time
 def displayMenuDismusic():
     title = "Menu 🎶🎵"
     description = ""
-    description += "▶ `-p *song name*` <Play/add a song to music queue>" + "\n"
+    description += "▶️ `-p *song name*` <Play/add a song to music queue>" + "\n"
     description += "❓ `-np` <Check now playing>" + "\n"
     description += "⌛ `-q` <Check music queue>" + "\n"
     description += "⏩ `-skip` <Skip to next song>" + "\n"
@@ -27,7 +27,9 @@ def displayMenuDismusic():
 def displayMenuYoutubeDL():
     title = "🎶🎵 Menu 🎶🎵"
     description = ""
-    description += "▶ `-p *song name*` <play/add a song to music queue>" + "\n"
+    description += "▶️ `-p *song name*` <play/add a song to music queue>" + "\n"
+    description += "⏸ `-pause` <pause the track>" + "\n"
+    description += "⏯ `-resume` <resume the track>" + "\n"
     description += "⏩ `-skip` <skip to next song>" + "\n"
     description += "🛑 `-stop` <stop and disconnect>" + "\n"
     colour = discord.Colour.blue()

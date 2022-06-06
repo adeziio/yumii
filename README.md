@@ -5,8 +5,14 @@
 ### 🎶🎵 To pull up the menu:
 -yumii
 
-### ▶ play/add a song to music queue:
+### ▶️ play/add a song to music queue:
 -p *song name*
+
+### ⏸ pause the track:
+-pause
+
+### ⏯ resume the track:
+-resume
 
 ### ⏩ skip to next song:
 -skip
