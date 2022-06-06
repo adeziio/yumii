@@ -5,14 +5,16 @@ from MusicYoutubeDL import MusicYoutubeDL
 from music_utils import displaySongInfo
 from discord_components import DiscordComponents
 
+# initialize bot
 Bot = commands.Bot(command_prefix='-')
 musicObj = MusicYoutubeDL(Bot)
+Bot.add_cog(musicObj)
+DiscordComponents(Bot)
+
+# global variables
 musicObjstatus = musicObj.getStatus()
 musicObjActivity = musicObj.getActivity()
 timestamp = 0
-
-Bot.add_cog(musicObj)
-DiscordComponents(Bot)
 
 
 @Bot.event
