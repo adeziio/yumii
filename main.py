@@ -19,7 +19,7 @@ timestamp = 0
 
 @Bot.event
 async def on_ready():
-    print("yumii is online! ")
+    print("yumii is online!")
     change_status.start()
 
 
