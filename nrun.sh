@@ -1,2 +1,2 @@
 #! /bin/bash
-nohup python3 main.py &
+nohup python main.py &
