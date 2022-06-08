@@ -166,6 +166,7 @@ class MusicYoutubeDL(commands.Cog):
             else:
                 self.music_queue.append([song, voice_channel])
                 if self.is_playing == False:
+                    await self.clear(self.ctx, 100)
                     await self.play_music()
 
     @commands.command()
@@ -195,3 +196,7 @@ class MusicYoutubeDL(commands.Cog):
     async def resume(self, ctx):
         await ctx.message.delete()
         self.togglePauseResumeButton()
+
+    @commands.command()
+    async def clear(self, ctx, number):
+        await ctx.channel.purge(limit=int(number))
