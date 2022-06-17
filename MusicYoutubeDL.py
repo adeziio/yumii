@@ -166,7 +166,6 @@ class MusicYoutubeDL(commands.Cog):
             else:
                 self.music_queue.append([song, voice_channel])
                 if self.is_playing == False:
-                    await self.clear(self.ctx, 100)
                     await self.play_music()
 
     @commands.command()
