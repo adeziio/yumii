@@ -19,7 +19,9 @@ timestamp = 0
 
 @Bot.event
 async def on_ready():
-    print("yumii is online!")
+    print("Name\t: {0.user}".format(Bot))
+    print("Version\t: 1.0.0")
+    print("Status\t: active")
     change_status.start()
 
 
