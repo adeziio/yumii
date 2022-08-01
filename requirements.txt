@@ -1,4 +1,4 @@
-pip==22.1.2
+pyinstaller==5.3
 youtube_dl==2021.12.17
 discord.py[voice]==1.7.3
 discord_components==2.1.2
