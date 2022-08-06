@@ -1,3 +1,3 @@
 #!/bin/bash
 pip install -r requirements.txt
-pyinstaller -F --noconsole yumii.py
+nohup python yumii.py &

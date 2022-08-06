@@ -3,6 +3,4 @@
 poetry.lock
 pyproject.toml
 __pycache__
-build
-dist
-yumii.spec
+nohup.out
