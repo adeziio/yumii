@@ -44,38 +44,69 @@ class MusicYoutubeDL(commands.Cog):
     def setCurrentDisplay(self, newCurrentDisplay):
         self.currentDisplay = newCurrentDisplay
 
-    def search_yt(self, item):
-        with YoutubeDL(self.YDL_OPTIONS) as ydl:
-            try:
-                info = ydl.extract_info("ytsearch:%s" %
-                                        item, download=False)['entries'][0]
-            except Exception:
-                return False
+    def search_yt(self, query):
+        import ytmusicapi
+        yt = ytmusicapi.YTMusic()
+        query = "unity fat rat"
+        videoId = yt.search(query)[0]["videoId"]
+        print(videoId)
+        
+        print("query:",query)
+        # link = "https://www.youtube.com/watch?v=v1ADEPnPt54"
+        # with YoutubeDL(self.YDL_OPTIONS) as ydl:
+        #     try:
+        #         print("trying to download...")
+        #         # info = ydl.extract_info("ytsearch:%s" %
+        #         #                         query, download=False)['entries'][0]
+        #         # print("downloaded:", info)
+        #         info = ydl.extract_info(link, download=False)
+        #         for i, format in enumerate(info['formats']):
+        #             print(f"[{i}] {format['format']}")
+        #     except Exception:
+        #         return False
 
-        try:
-            artist = info['artist']
-        except Exception:
-            artist = ""
+        import yt_dlp
 
-        try:
-            album = info['album']
-        except Exception:
-            album = ""
+        URLS = ['https://www.youtube.com/watch?v=BaW_jenozKc']
 
-        infoJson = {
-            'source': info['formats'][0]['url'],
-            'title': info['title'],
-            'artist': artist,
-            'album': album,
-            'thumbnail': info['thumbnail'],
-            'webpage_url': info['webpage_url'],
-            'channel_url': info['channel_url'],
-            'description': info['description'],
-            'duration': str(timedelta(seconds=info['duration'])),
-            'view_count': "{:,}".format(info['view_count']),
-            'upload_date': str(datetime.strptime(info['upload_date'], '%Y%m%d').strftime('%b %d, %Y')),
+        ydl_opts = {
+            'format': 'm4a/bestaudio/best',
+            # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
+            'postprocessors': [{  # Extract audio using ffmpeg
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'm4a',
+            }]
         }
-        return infoJson
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            error_code = ydl.download(URLS)
+        
+                
+
+        # try:
+        #     artist = info['artist']
+        # except Exception:
+        #     artist = ""
+
+        # try:
+        #     album = info['album']
+        # except Exception:
+        #     album = ""
+
+        # infoJson = {
+        #     'source': info['formats'][0]['url'],
+        #     'title': info['title'],
+        #     'artist': artist,
+        #     'album': album,
+        #     'thumbnail': info['thumbnail'],
+        #     'webpage_url': info['webpage_url'],
+        #     'channel_url': info['channel_url'],
+        #     'description': info['description'],
+        #     'duration': str(timedelta(seconds=info['duration'])),
+        #     'view_count': "{:,}".format(info['view_count']),
+        #     'upload_date': str(datetime.strptime(info['upload_date'], '%Y%m%d').strftime('%b %d, %Y')),
+        # }
+        # return infoJson
 
     def checkIsPlaying(self):
         if self.is_playing:

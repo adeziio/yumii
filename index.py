@@ -2,8 +2,12 @@ import os
 import discord
 from discord.ext import commands, tasks
 from MusicYoutubeDL import MusicYoutubeDL
+from server import keep_alive
 from music_utils import displaySongInfo
+from dotenv import load_dotenv, find_dotenv
 from discord_components import DiscordComponents
+
+load_dotenv(find_dotenv())
 
 # initialize bot
 Bot = commands.Bot(command_prefix='-')
@@ -80,4 +84,5 @@ async def change_status():
         except:
             None
 
+keep_alive()
 Bot.run(os.getenv('YUMII_TOKEN'))

@@ -1,6 +1,9 @@
+Flask==2.2.1
+python-dotenv==0.20.0
 pyinstaller==5.3
 youtube_dl==2021.12.17
 discord.py[voice]==1.7.3
 discord_components==2.1.2
 ffmpeg==1.4
 PyNaCl==1.4.0
+yt-dlp==2023.7.6
